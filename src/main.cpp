@@ -1,15 +1,13 @@
 
 #include <WiFi.h>
 #include <WebServer.h>
+#include "secret.h" 
 
-WebServer Jess(80);
+WebServer server(80);
 
-const char* SSID = "ANITAB LAB";
-const char* Pass = "Akirachix@2011";
-int led = 2;
-
+const int LED_PIN = 2;
 unsigned long lastBlinkTime = 0;
-int blinkDelay = 500;
+int blinkDelay = 500; 
 bool ledState = false;
 
 String page() {
@@ -140,7 +138,7 @@ String page() {
          "</div>"
          "<div class='card'>"
          "<h2>LED Delay Control</h2>"
-         "<label for='delayInput'>Blink Delay (milliseconds):</label>"
+         "<label for='delayInput'>Blink Delay:</label>"
          "<input type='number' id='delayInput' min='0' placeholder='e.g., 500' value='" + String(blinkDelay) + "'>"
          "<button onclick='updateDelay()'>Update Delay</button>"
          "<p id='status-msg' style='margin-top:15px; font-weight:bold; color:#0056b3;'>Status: Running</p>"
@@ -233,7 +231,7 @@ String page() {
          "  var ssid = document.getElementById('selected-ssid').value;"
          "  var pass = document.getElementById('wifi-pass').value;"
          "  closeModal();"
-         "  document.getElementById('wifi-list').innerHTML = 'Attempting connection to ' + ssid + '... Check serial monitor.';"
+         "  document.getElementById('wifi-list').innerHTML = 'Attempting connection to ' + ssid + '... Check serial monitor or refresh page shortly.';"
          "  fetch('/connect?ssid=' + encodeURIComponent(ssid) + '&pass=' + encodeURIComponent(pass));"
          "}"
          "</script>"
@@ -242,7 +240,7 @@ String page() {
 }
 
 void handleRoot() {
-  Jess.send(200, "text/html", page());
+  server.send(200, "text/html", page());
 }
 
 void handleScan() {
@@ -258,6 +256,7 @@ void handleScan() {
       }
     }
   }
+
   String json = "[";
   for (int i = 0; i < n; ++i) {
     if (i > 0) json += ",";
@@ -268,59 +267,72 @@ void handleScan() {
     json += "}";
   }
   json += "]";
-  Jess.send(200, "application/json", json);
+  
+  server.send(200, "application/json", json);
 }
 
 void handleSetDelay() {
-  if (Jess.hasArg("val")) {
-    int val = Jess.arg("val").toInt();
+  if (server.hasArg("val")) {
+    int val = server.arg("val").toInt();
     blinkDelay = val;
-if (blinkDelay == 0) {digitalWrite(led, LOW);
-  Jess.send(200, "text/plain", "LED Turned OFF (Delay 0)");} 
-  else 
-  {Jess.send(200, "text/plain", "Delay updated to " + String(blinkDelay) + "ms");}}
-   else {Jess.send(400, "text/plain", "Bad Request");}}
-
-
+    if (blinkDelay == 0) {
+      digitalWrite(LED_PIN, LOW);
+      server.send(200, "text/plain", "LED Turned OFF (Delay 0)");
+    } else {
+      server.send(200, "text/plain", "Delay updated to " + String(blinkDelay) + "ms");
+    }
+  } else {
+    server.send(400, "text/plain", "Bad Request");
+  }
+}
 
 void handleConnect() {
-  if (Jess.hasArg("ssid") &&
-     Jess.hasArg("pass")) {String req_ssid = Jess.arg("ssid");
+  if (server.hasArg("ssid") && server.hasArg("pass")) {
+    String req_ssid = server.arg("ssid");
+    String req_pass = server.arg("pass");
+    
+    server.send(200, "text/plain", "Connecting...");
+    delay(100); 
 
-     String req_pass = Jess.arg("pass");
-      Jess.send(200, "text/plain", "Connecting...");
-      delay(100);WiFi.disconnect();
-      WiFi.begin(req_ssid.c_str(), req_pass.c_str());
-      Serial.print("Connecting to target network: ");
-      Serial.println(req_ssid);} 
-      else {Jess.send(400, "text/plain", "Missing Parameters");}}
+    WiFi.disconnect();
+    WiFi.begin(req_ssid.c_str(), req_pass.c_str());
+    
+    Serial.print("Connecting to target network: ");
+    Serial.println(req_ssid);
+  } else {
+    server.send(400, "text/plain", "Missing Parameters");
+  }
+}
 
+void setup() {
+  Serial.begin(115200);
+  pinMode(LED_PIN, OUTPUT);
 
+  WiFi.mode(WIFI_AP_STA);
+  WiFi.softAP(AP_SSID, AP_PASS);
+  
+  Serial.println("Access Point Started!");
+  Serial.print("Connect to Wi-Fi: "); Serial.println(AP_SSID);
+  Serial.print("Dashboard IP Address: "); Serial.println(WiFi.softAPIP());
 
-      void setup() {
-        
-        WiFi.mode(WIFI_AP_STA);
-        WiFi.begin(SSID, Pass);
-        Serial.begin(115200);
-        while (WiFi.status() != WL_CONNECTED) {Serial.print("connecting");
-          delay(1000);}
-          pinMode(led, OUTPUT);
-          Serial.print("connected");
-          Serial.println(WiFi.localIP());
-          Jess.on("/", handleRoot);
-          Jess.on("/scan", handleScan);
-          Jess.on("/set_delay", handleSetDelay);
-          Jess.on("/connect", handleConnect);
-          Jess.begin();
-        }
-          
-          
-          void loop() {
-            Jess.handleClient();
-            if (blinkDelay > 0) {unsigned long currentMillis = millis();
-              if (currentMillis - lastBlinkTime >= blinkDelay) {lastBlinkTime = currentMillis;
-                ledState = !ledState;
-                digitalWrite(led, ledState);
-              }
-            }
-          }
+  server.on("/", handleRoot);
+  server.on("/scan", handleScan);
+  server.on("/set_delay", handleSetDelay);
+  server.on("/connect", handleConnect);
+  
+  server.begin();
+  Serial.println("HTTP Web Server Started.");
+}
+
+void loop() {
+  server.handleClient();
+
+  if (blinkDelay > 0) {
+    unsigned long currentMillis = millis();
+    if (currentMillis - lastBlinkTime >= blinkDelay) {
+      lastBlinkTime = currentMillis;
+      ledState = !ledState;
+      digitalWrite(LED_PIN, ledState);
+    }
+  }
+}
