@@ -1,7 +1,7 @@
-#ifndef SECRETS_H
-#define SECRETS_H
+#ifndef SECRET_H
+#define SECRET_H
 
-const char* AP_SSID = "ESP32_Dashboard";
-const char* AP_PASS = "12345678";
+const char* SSID     = "ANITAB LAB";
+const char* PASSWORD = "Akirachix@2011";
 
 #endif

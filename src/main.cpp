@@ -1,4 +1,3 @@
-
 #include <WiFi.h>
 #include <WebServer.h>
 #include "secret.h" 
@@ -17,132 +16,44 @@ String page() {
          "<meta charset='UTF-8'>"
          "<meta name='viewport' content='width=device-width, initial-scale=1.0'>"
          "<style>"
-         "body {"
-         "font-family: 'Segoe UI', Arial, sans-serif;"
-         "line-height: 1.6;"
-         "color: #6e6868;"
-         "background-color: #000000;"
-         "margin: 0;"
-         "padding: 20px;"
-         "}"
-         ".container {"
-         "max-width: 900px;"
-         "margin: 40px auto;"
-         "display: grid;"
-         "grid-template-columns: 1fr 1fr;"
-         "gap: 20px;"
-         "}"
-         "@media (max-width: 768px) {"
-         ".container {"
-         "grid-template-columns: 1fr;"
-         "}"
-         "}"
-         ".card {"
-         "background: white;"
-         "padding: 30px;"
-         "border-radius: 12px;"
-         "box-shadow: 0 4px 15px rgba(143, 22, 22, 0.05);"
-         "border-left: 5px solid #f905d5;"
-         "}"
-         "h2 {"
-         "color: #b30000;"
-         "margin-top: 0;"
-         "margin-bottom: 20px;"
-         "}"
-         "button {"
-         "background-color: #1f2022;"
-         "color: white;"
-         "border: none;"
-         "padding: 12px 20px;"
-         "font-size: 1rem;"
-         "border-radius: 6px;"
-         "cursor: pointer;"
-         "width: 100%;"
-         "margin-bottom: 10px;"
-         "}"
-         "button:hover {"
-         "background-color: #004085;"
-         "}"
-         "input[type='number'], input[type='password'] {"
-         "width: 100%;"
-         "padding: 10px;"
-         "margin: 10px 0 20px 0;"
-         "border: 1px solid #ccc;"
-         "border-radius: 6px;"
-         "box-sizing: border-box;"
-         "font-size: 1rem;"
-         "}"
-         ".wifi-item {"
-         "display: flex;"
-         "justify-content: space-between;"
-         "align-items: center;"
-         "padding: 10px;"
-         "margin: 8px 0;"
-         "background: #4b545d;"
-         "border-radius: 6px;"
-         "border: 1px solid #b1bdca;"
-         "cursor: pointer;"
-         "}"
-         ".wifi-item:hover {"
-         "background: #e9ecef;"
-         "}"
-         ".signal {"
-         "font-weight: bold;"
-         "color: #5d590c;"
-         "}"
-         ".modal {"
-         "display: none;"
-         "position: fixed;"
-         "top: 0;"
-         "left: 0;"
-         "width: 100%;"
-         "height: 100%;"
-         "background: rgba(0,0,0,0.5);"
-         "justify-content: center;"
-         "align-items: center;"
-         "}"
-         ".modal-content {"
-         "background: white;"
-         "padding: 25px;"
-         "border-radius: 12px;"
-         "width: 90%;"
-         "max-width: 400px;"
-         "}"
-         ".display {"
-         "font-size: 2rem;"
-         "font-weight: bold;"
-         "text-align: center;"
-         "margin: 20px 0;"
-         "color: #222;"
-         "font-family: monospace;"
-         "}"
-         ".btn-group {"
-         "display: flex;"
-         "gap: 10px;"
-         "}"
+         "body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #e0e0e0; background-color: #121212; margin: 0; padding: 20px; }"
+         ".container { max-width: 900px; margin: 40px auto; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }"
+         "@media (max-width: 768px) { .container { grid-template-columns: 1fr; } }"
+         ".card { background: #1e1e1e; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); border-left: 5px solid #f905d5; }"
+         "h2 { color: #ff4d4d; margin-top: 0; margin-bottom: 20px; }"
+         "button { background-color: #333; color: white; border: none; padding: 12px 20px; font-size: 1rem; border-radius: 6px; cursor: pointer; width: 100%; margin-bottom: 10px; }"
+         "button:hover { background-color: #0056b3; }"
+         "input[type='number'], input[type='password'] { width: 100%; padding: 10px; margin: 10px 0 20px 0; border: 1px solid #444; background: #2a2a2a; color: white; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }"
+         ".wifi-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; margin: 8px 0; background: #2a2a2a; border-radius: 6px; border: 1px solid #444; cursor: pointer; }"
+         ".wifi-item:hover { background: #3a3a3a; }"
+         ".signal { font-weight: bold; color: #ffcc00; }"
+         ".modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; }"
+         ".modal-content { background: #1e1e1e; padding: 25px; border-radius: 12px; width: 90%; max-width: 400px; border: 1px solid #444; }"
+         ".display { font-size: 2rem; font-weight: bold; text-align: center; margin: 20px 0; color: #00ffcc; font-family: monospace; }"
+         ".btn-group { display: flex; gap: 10px; }"
          "</style>"
          "</head>"
          "<body>"
-         "<h1 style='text-align:center; color:#0056b3; margin-bottom:10px;'>ESP32 Control Dashboard</h1>"
+         "<h1 style='text-align:center; color:#00ffff; margin-bottom:10px;'>ESP32 Control Dashboard</h1>"
          "<div class='container'>"
          "<div class='card'>"
          "<h2>Clock & Stopwatch</h2>"
          "<div class='display' id='clockDisplay'>00:00:00</div>"
-         "<hr style='border:0; border-top:1px solid #eee; margin:20px 0;'>"
+         "<hr style='border:0; border-top:1px solid #333; margin:20px 0;'>"
          "<div class='display' id='stopwatchDisplay'>00:00:00.00</div>"
          "<div class='btn-group'>"
          "<button onclick='startStopwatch()'>Start</button>"
-         "<button onclick='stopStopwatch()' style='background-color:#6c757d;'>Stop</button>"
-         "<button onclick='resetStopwatch()' style='background-color:#dc3545;'>Reset</button>"
+         "<button onclick='stopStopwatch()' style='background-color:#555;'>Stop</button>"
+         "<button onclick='resetStopwatch()' style='background-color:#990000;'>Reset</button>"
          "</div>"
          "</div>"
          "<div class='card'>"
          "<h2>LED Delay Control</h2>"
-         "<label for='delayInput'>Blink Delay:</label>"
+         "<label for='delayInput'>Blink Delay (ms):</label>"
          "<input type='number' id='delayInput' min='0' placeholder='e.g., 500' value='" + String(blinkDelay) + "'>"
          "<button onclick='updateDelay()'>Update Delay</button>"
-         "<p id='status-msg' style='margin-top:15px; font-weight:bold; color:#0056b3;'>Status: Running</p>"
-         "<hr style='border:0; border-top:1px solid #eee; margin:20px 0;'>"
+         "<p id='status-msg' style='margin-top:15px; font-weight:bold; color:#00ffff;'>Status: Running</p>"
+         "<hr style='border:0; border-top:1px solid #333; margin:20px 0;'>"
          "<h2>Wi-Fi Networks</h2>"
          "<button onclick='scanWifi()'>Scan Networks</button>"
          "<div id='wifi-list' style='margin-top: 20px;'></div>"
@@ -154,8 +65,8 @@ String page() {
          "<input type='hidden' id='selected-ssid'>"
          "<label>Password:</label>"
          "<input type='password' id='wifi-pass' placeholder='Enter Wi-Fi password'>"
-         "<button onclick='connectWifi()' style='margin-bottom:10px;'>Connect</button>"
-         "<button onclick='closeModal()' style='background-color:#6c757d;'>Cancel</button>"
+         "<button onclick='connectWifi()' style='margin-bottom:10px; background-color:#28a745;'>Connect</button>"
+         "<button onclick='closeModal()' style='background-color:#555;'>Cancel</button>"
          "</div>"
          "</div>"
          "<script>"
@@ -163,9 +74,7 @@ String page() {
          "  var d = new Date();"
          "  document.getElementById('clockDisplay').innerText = d.toLocaleTimeString();"
          "}, 1000);"
-         "var startTime = 0;"
-         "var elapsedTime = 0;"
-         "var timerInterval;"
+         "var startTime = 0; var elapsedTime = 0; var timerInterval;"
          "function startStopwatch() {"
          "  if (!timerInterval) {"
          "    startTime = Date.now() - elapsedTime;"
@@ -174,28 +83,16 @@ String page() {
          "      var diff = elapsedTime;"
          "      var ms = Math.floor((diff % 1000) / 10);"
          "      diff = Math.floor(diff / 1000);"
-         "      var s = diff % 60;"
-         "      diff = Math.floor(diff / 60);"
-         "      var m = diff % 60;"
-         "      var h = Math.floor(diff / 60);"
+         "      var s = diff % 60; diff = Math.floor(diff / 60);"
+         "      var m = diff % 60; var h = Math.floor(diff / 60);"
          "      document.getElementById('stopwatchDisplay').innerText = "
-         "        (h < 10 ? '0' + h : h) + ':' + "
-         "        (m < 10 ? '0' + m : m) + ':' + "
-         "        (s < 10 ? '0' + s : s) + '.' + "
-         "        (ms < 10 ? '0' + ms : ms);"
+         "        (h < 10 ? '0' + h : h) + ':' + (m < 10 ? '0' + m : m) + ':' + "
+         "        (s < 10 ? '0' + s : s) + '.' + (ms < 10 ? '0' + ms : ms);"
          "    }, 10);"
          "  }"
          "}"
-         "function stopStopwatch() {"
-         "  clearInterval(timerInterval);"
-         "  timerInterval = null;"
-         "}"
-         "function resetStopwatch() {"
-         "  clearInterval(timerInterval);"
-         "  timerInterval = null;"
-         "  elapsedTime = 0;"
-         "  document.getElementById('stopwatchDisplay').innerText = '00:00:00.00';"
-         "}"
+         "function stopStopwatch() { clearInterval(timerInterval); timerInterval = null; }"
+         "function resetStopwatch() { clearInterval(timerInterval); timerInterval = null; elapsedTime = 0; document.getElementById('stopwatchDisplay').innerText = '00:00:00.00'; }"
          "function scanWifi() {"
          "  var list = document.getElementById('wifi-list');"
          "  list.innerHTML = 'Scanning networks, please wait...';"
@@ -231,8 +128,11 @@ String page() {
          "  var ssid = document.getElementById('selected-ssid').value;"
          "  var pass = document.getElementById('wifi-pass').value;"
          "  closeModal();"
-         "  document.getElementById('wifi-list').innerHTML = 'Attempting connection to ' + ssid + '... Check serial monitor or refresh page shortly.';"
-         "  fetch('/connect?ssid=' + encodeURIComponent(ssid) + '&pass=' + encodeURIComponent(pass));"
+         "  var list = document.getElementById('wifi-list');"
+         "  list.innerHTML = 'Instructing ESP32 to connect to ' + ssid + '...';"
+         "  fetch('/connect?ssid=' + encodeURIComponent(ssid) + '&pass=' + encodeURIComponent(pass))"
+         "    .then(function(res) { return res.text(); })"
+         "    .then(function(msg) { list.innerHTML = msg; });"
          "}"
          "</script>"
          "</body>"
@@ -245,42 +145,33 @@ void handleRoot() {
 
 void handleScan() {
   int n = WiFi.scanNetworks();
-  int indices[n];
-  for (int i = 0; i < n; i++) indices[i] = i;
-  for (int i = 0; i < n - 1; i++) {
-    for (int j = i + 1; j < n; j++) {
-      if (WiFi.RSSI(indices[j]) > WiFi.RSSI(indices[i])) {
-        int temp = indices[i];
-        indices[i] = indices[j];
-        indices[j] = temp;
-      }
-    }
-  }
-
   String json = "[";
   for (int i = 0; i < n; ++i) {
     if (i > 0) json += ",";
     json += "{";
-    json += "\"ssid\":\"" + WiFi.SSID(indices[i]) + "\",";
-    json += "\"rssi\":" + String(WiFi.RSSI(indices[i])) + ",";
-    json += "\"crypto\":\"" + String((WiFi.encryptionType(indices[i]) == WIFI_AUTH_OPEN) ? "Open" : "Secured") + "\"";
+    json += "\"ssid\":\"" + WiFi.SSID(i) + "\",";
+    json += "\"rssi\":" + String(WiFi.RSSI(i)) + ",";
+    String crypto;
+    switch (WiFi.encryptionType(i)) {
+      case WIFI_AUTH_OPEN: crypto = "Open"; break;
+      case WIFI_AUTH_WEP: crypto = "WEP"; break;
+      case WIFI_AUTH_WPA_PSK: crypto = "WPA"; break;
+      case WIFI_AUTH_WPA2_PSK: crypto = "WPA2"; break;
+      case WIFI_AUTH_WPA_WPA2_PSK: crypto = "WPA/WPA2"; break;
+      default: crypto = "Unknown";
+    }
+    json += "\"crypto\":\"" + crypto + "\"";
     json += "}";
   }
   json += "]";
-  
+  WiFi.scanDelete();
   server.send(200, "application/json", json);
 }
 
 void handleSetDelay() {
   if (server.hasArg("val")) {
-    int val = server.arg("val").toInt();
-    blinkDelay = val;
-    if (blinkDelay == 0) {
-      digitalWrite(LED_PIN, LOW);
-      server.send(200, "text/plain", "LED Turned OFF (Delay 0)");
-    } else {
-      server.send(200, "text/plain", "Delay updated to " + String(blinkDelay) + "ms");
-    }
+    blinkDelay = server.arg("val").toInt();
+    server.send(200, "text/plain", "Delay updated to " + String(blinkDelay) + "ms");
   } else {
     server.send(400, "text/plain", "Bad Request");
   }
@@ -288,19 +179,15 @@ void handleSetDelay() {
 
 void handleConnect() {
   if (server.hasArg("ssid") && server.hasArg("pass")) {
-    String req_ssid = server.arg("ssid");
-    String req_pass = server.arg("pass");
+    String ssid = server.arg("ssid");
+    String pass = server.arg("pass");
     
-    server.send(200, "text/plain", "Connecting...");
-    delay(100); 
-
-    WiFi.disconnect();
-    WiFi.begin(req_ssid.c_str(), req_pass.c_str());
+    server.send(200, "text/plain", "Switching networks... Dashboard connection will drop.");
     
-    Serial.print("Connecting to target network: ");
-    Serial.println(req_ssid);
+    Serial.println("Switching Station Wi-Fi connection to: " + ssid);
+    WiFi.begin(ssid.c_str(), pass.c_str());
   } else {
-    server.send(400, "text/plain", "Missing Parameters");
+    server.send(400, "text/plain", "Missing fields");
   }
 }
 
@@ -308,12 +195,24 @@ void setup() {
   Serial.begin(115200);
   pinMode(LED_PIN, OUTPUT);
 
-  WiFi.mode(WIFI_AP_STA);
-  WiFi.softAP(AP_SSID, AP_PASS);
-  
-  Serial.println("Access Point Started!");
-  Serial.print("Connect to Wi-Fi: "); Serial.println(AP_SSID);
-  Serial.print("Dashboard IP Address: "); Serial.println(WiFi.softAPIP());
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(SSID, PASSWORD);
+  Serial.print("Connecting to Wi-Fi");
+
+  int attempts = 0;
+  while (WiFi.status() != WL_CONNECTED && attempts < 20) {
+    delay(500);
+    Serial.print(".");
+    attempts++;
+  }
+
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println("\nConnected successfully!");
+    Serial.print("Access dashboard at: http://");
+    Serial.println(WiFi.localIP());
+  } else {
+    Serial.println("\nConnection failed! Check your credentials in secret.h");
+  }
 
   server.on("/", handleRoot);
   server.on("/scan", handleScan);
@@ -321,18 +220,22 @@ void setup() {
   server.on("/connect", handleConnect);
   
   server.begin();
-  Serial.println("HTTP Web Server Started.");
+  Serial.println("HTTP Server started");
 }
+
 
 void loop() {
   server.handleClient();
 
-  if (blinkDelay > 0) {
-    unsigned long currentMillis = millis();
-    if (currentMillis - lastBlinkTime >= blinkDelay) {
-      lastBlinkTime = currentMillis;
-      ledState = !ledState;
-      digitalWrite(LED_PIN, ledState);
-    }
-  }
+static bool connectedLastCheck = false;
+if (WiFi.status() == WL_CONNECTED && !connectedLastCheck)
+ {Serial.print("Connected to network! Access dashboard at http://");
+  Serial.println(WiFi.localIP());connectedLastCheck = true;
+} else if
+ (WiFi.status() != WL_CONNECTED && connectedLastCheck) 
+ {Serial.println("Disconnected from Wi-Fi.");
+  connectedLastCheck = false;
+}if (millis() - lastBlinkTime >= (unsigned long)blinkDelay) {lastBlinkTime = millis();
+  ledState = !ledState;digitalWrite(LED_PIN, ledState);
+}
 }
